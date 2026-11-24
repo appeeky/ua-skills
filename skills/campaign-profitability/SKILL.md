@@ -59,7 +59,27 @@ asa_profitability
   min_spend: 10
 ```
 
-ASA is the only channel with native revenue join via Appeeky.
+ASA has an exact revenue join: the campaign, ad group and keyword of each install are known.
+
+### Appeeky Analytics pull (when the app has the Appeeky SDK)
+
+```
+analytics_roas
+  app_id: "<app id>"
+  range: 30d
+  level: campaign
+```
+
+Returns ASA rows joined with the revenue the SDK attributed, and a `channels` list with TikTok and Meta campaigns. A TikTok or Meta campaign only has revenue there when its ads use an Appeeky smart link with that network as channel and the campaign id as external id; `unlinked` says how much spend had no link. Google Ads is not included.
+
+```
+analytics_costs
+  app_id: "<app id>"
+  range: 30d
+  level: campaign
+```
+
+Returns stored daily spend for ASA, Meta and TikTok in one shape (campaign, ad group / ad set or keyword), in each account's own currency. Spend only: use it for trends and totals, and `analytics_roas` for revenue.
 
 ### Revenue baseline
 
@@ -138,6 +158,7 @@ For each connected channel, report:
 |---------|--------|
 | TikTok | iOS data delayed 24–72h; judge at 7 days |
 | Meta | AEM modeling on iOS; expect 10–20% discrepancy vs MMP |
+| TikTok, Meta | ROAS via Appeeky only for campaigns whose ads use a smart link with the campaign id; other campaigns show spend without revenue |
 | ASA | Most reliable ROAS via Appeeky join |
 | Google UAC | Manual tracking; no Appeeky API yet |
 
